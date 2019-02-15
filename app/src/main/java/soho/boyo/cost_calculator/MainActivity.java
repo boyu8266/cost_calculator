@@ -63,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        text_string = "(往下滑查看完整內容)\n\n" +
-                "試算結果：\n" +
+        text_string = //"(往下滑查看完整內容)\n\n" +
+                //"試算結果：\n" +
                 "----------\n";
         float total_cost_ground=0;
         float total_cost_ball=0;
@@ -226,7 +226,23 @@ public class MainActivity extends AppCompatActivity {
             LL4.setVisibility(View.GONE);
 
         tv_detail.setVisibility(View.VISIBLE);
-        tv_detail.setText(text_string);
+        tv_detail.setText("點擊我看明細");
+        tv_detail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("明細")
+                        .setMessage(text_string)
+                        .setPositiveButton("返回", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                return;
+                            }
+                        })
+                        .show();
+                return;
+            }
+        });
         myClosekeyboard();
     }
 
