@@ -4,8 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,29 +19,30 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText et1,et2,et3,et4,et5,et6,et7,et8,et9,et10,et11,et12,et13;
-    Button bt,bt_clear;
-    TextView tv, tv1_1, tv1_2,
-            tv2_1, tv2_2, tv2_3, tv2_4,
-            tv3_1, tv3_2, tv3_3,
-            tv4_1,
-            tv5_1,
-            tv_detail;
-    TextView tv6,tv7,tv8,tv9,tv10,tv11,tv12,tv13;
-    LinearLayout LL1, LL2, LL3, LL4, LL5;
-
-    String text_string = "填入相對應顏色之欄位即可進行計算\n" +
-            "可單純計算場地費或球費\n" +
-            "公費(橘色) 及 場地基金(紫色) 欄位為選填項目";
-
-    SharedPreferences Preferences;
-
     static final String data = "data";
     static final String ground_cost = "ground_cost";
     static final String ball_cost_float = "ball_cost_float";
     static final String now_pub_money = "now_pub_money";
     static final String next_ground_money = "next_ground_money";
     static final String card_money = "card_money";
+    final int simple = 0;
+    final int force = 1;
+    EditText et1, et2, et3, et4, et5, et6, et7, et8, et9, et10, et11, et12, et13;
+    Button bt, bt_clear;
+    TextView tv, tv1_1, tv1_2,
+            tv2_1, tv2_2, tv2_3, tv2_4,
+            tv3_1, tv3_2, tv3_3,
+            tv4_1,
+            tv5_1,
+            tv_detail;
+    TextView tv6, tv7, tv8, tv9, tv10, tv11, tv12, tv13;
+    LinearLayout LL1, LL2, LL3, LL4, LL5;
+    String text_string = "填入相對應顏色之欄位即可進行計算\n" +
+            "可單純計算場地費或球費\n" +
+            "公費(橘色) 及 場地基金(紫色) 欄位為選填項目";
+    SharedPreferences Preferences;
+    int status = 0;
+    private Toast mToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +54,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    void start_calculator(){
-        if(et5.getText().toString().equals("") ||
-                Integer.parseInt(et5.getText().toString())==0) {
+    void start_calculator() {
+        if (et5.getText().toString().equals("") ||
+                Integer.parseInt(et5.getText().toString()) == 0) {
             showToast("請確認欄位 - [打球人數]");
             text_string = "請確認欄位 - [打球人數]";
             tv.setText(text_string);
@@ -66,40 +67,40 @@ public class MainActivity extends AppCompatActivity {
         text_string = //"(往下滑查看完整內容)\n\n" +
                 //"試算結果：\n" +
                 "----------\n";
-        float total_cost_ground=0;
-        float total_cost_ball=0;
-        float total_cost=0;
-        if(!et1.getText().toString().equals("") &&
+        float total_cost_ground = 0;
+        float total_cost_ball = 0;
+        float total_cost = 0;
+        if (!et1.getText().toString().equals("") &&
                 !et2.getText().toString().equals("") &&
-                Integer.parseInt(et1.getText().toString())>0 &&
-                Float.parseFloat(et2.getText().toString())>0){
+                Integer.parseInt(et1.getText().toString()) > 0 &&
+                Float.parseFloat(et2.getText().toString()) > 0) {
             total_cost_ground = Integer.parseInt(et1.getText().toString()) * Float.parseFloat(et2.getText().toString());
             Preferences.edit().putInt(ground_cost, Integer.parseInt(et1.getText().toString())).commit();
             text_string += "場地(小時/元) x 使用小時 = 總場地費\n" +
                     et1.getText().toString() + " x " + et2.getText().toString() + " = " + String.valueOf(total_cost_ground) + "\n";
         }
-        if(!et3.getText().toString().equals("") &&
+        if (!et3.getText().toString().equals("") &&
                 !et4.getText().toString().equals("") &&
-                Float.parseFloat(et3.getText().toString())>0 &&
-                Integer.parseInt(et4.getText().toString())>0){
+                Float.parseFloat(et3.getText().toString()) > 0 &&
+                Integer.parseInt(et4.getText().toString()) > 0) {
             total_cost_ball = Float.parseFloat(et3.getText().toString()) * Integer.parseInt(et4.getText().toString());
             Preferences.edit().putFloat(ball_cost_float, Float.parseFloat(et3.getText().toString())).commit();
             text_string += "羽球一顆(元) x 使用數量 = 總羽球花費\n" +
                     et3.getText().toString() + " x " + et4.getText().toString() + " = " + String.valueOf(total_cost_ball) + "\n";
         }
-        if(total_cost_ground>0 && total_cost_ball>0){
+        if (total_cost_ground > 0 && total_cost_ball > 0) {
             total_cost = total_cost_ground + total_cost_ball;
             text_string += "總場地費 + 總羽球花費 = 今日總支出\n" +
                     total_cost_ground + " + " + total_cost_ball + " = " + String.valueOf(total_cost) + "\n";
-        }else if(total_cost_ground>0){
+        } else if (total_cost_ground > 0) {
             total_cost = total_cost_ground;
             text_string += "總場地費 = 今日總支出\n" +
                     total_cost_ground + " = " + String.valueOf(total_cost) + "\n";
-        }else if(total_cost_ball>0){
+        } else if (total_cost_ball > 0) {
             total_cost = total_cost_ball;
             text_string += "總場地費 = 今日總支出\n" +
                     total_cost_ball + " = " + String.valueOf(total_cost) + "\n";
-        }else{
+        } else {
             showToast("請完成相對應顏色之欄位");
             text_string = "請完成相對應顏色之欄位";
             tv.setText(text_string);
@@ -108,14 +109,14 @@ public class MainActivity extends AppCompatActivity {
         }
         float average = total_cost / Integer.parseInt(et5.getText().toString());
         int each_cost = (int) average;
-        while(each_cost%10 != 0){
+        while (each_cost % 10 != 0) {
             each_cost++;
         }
         text_string += "----------\n" +
-                    "今日總支出 / 打球人數 = 平均每人分攤\n" +
-                    String.valueOf(total_cost) + " / " + et5.getText().toString() + " = " + String.valueOf(average) + "\n" +
-                    "建議每人收費：" + String.valueOf(each_cost) + "\n" +
-                    "----------\n";
+                "今日總支出 / 打球人數 = 平均每人分攤\n" +
+                String.valueOf(total_cost) + " / " + et5.getText().toString() + " = " + String.valueOf(average) + "\n" +
+                "建議每人收費：" + String.valueOf(each_cost) + "\n" +
+                "----------\n";
         float total_pub_money = 0;
         float in_money = 0;
         float today_money = 0;
@@ -123,16 +124,16 @@ public class MainActivity extends AppCompatActivity {
         float reduce_next_ground_money = 0;
         float today_next_ground_money = 0;
         float now_next_ground_money = 0;
-        if(!et6.getText().toString().equals("") && !et7.getText().toString().equals("") && Integer.parseInt(et7.getText().toString())>0 && total_cost>0){
+        if (!et6.getText().toString().equals("") && !et7.getText().toString().equals("") && Integer.parseInt(et7.getText().toString()) > 0 && total_cost > 0) {
             int pub_money = Integer.parseInt(et6.getText().toString());
-            today_money = (Integer.parseInt(et7.getText().toString())*Integer.parseInt(et5.getText().toString())) - total_cost;
+            today_money = (Integer.parseInt(et7.getText().toString()) * Integer.parseInt(et5.getText().toString())) - total_cost;
             total_pub_money = pub_money + today_money;
-            in_money = Integer.parseInt(et7.getText().toString())*Integer.parseInt(et5.getText().toString());
+            in_money = Integer.parseInt(et7.getText().toString()) * Integer.parseInt(et5.getText().toString());
             text_string += "每人收費 x 人數 = 今日總收金額\n" +
                     et7.getText().toString() + " x " + et5.getText().toString() + " = " + String.valueOf(in_money) + "\n" +
                     "今日總收金額 - 今日總支出 = 今日公費\n" +
                     in_money + " - " + total_cost + " = " + today_money + "\n";
-            if(!et13.getText().toString().equals("")){
+            if (!et13.getText().toString().equals("")) {
                 total_pub_money = pub_money + today_money - Integer.parseInt(et13.getText().toString());
                 text_string += "累積公費 + 今日公費 - 公費支出 = 當前總公費\n" +
                         String.valueOf(pub_money) + " + " + String.valueOf(today_money) + " - " + et13.getText().toString() + " = " + String.valueOf((total_pub_money)) + "\n" +
@@ -142,9 +143,9 @@ public class MainActivity extends AppCompatActivity {
                         String.valueOf(pub_money) + " + " + String.valueOf(today_money) + " = " + String.valueOf((total_pub_money)) + "\n" +
                         "----------\n";
             }
-            Preferences.edit().putInt(now_pub_money, (int)total_pub_money).commit();
+            Preferences.edit().putInt(now_pub_money, (int) total_pub_money).commit();
 
-            if(status == force) {
+            if (status == force) {
                 if (!et8.getText().toString().equals("") && !et9.getText().toString().equals("") && Integer.parseInt(et8.getText().toString()) > 0 && Integer.parseInt(et9.getText().toString()) >= 0) {
                     _next_ground_money = Integer.parseInt(et8.getText().toString());
                     reduce_next_ground_money = Integer.parseInt(et9.getText().toString());
@@ -168,8 +169,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         float _card_money = 0;
-        if(!et10.getText().toString().equals("") && Integer.parseInt(et10.getText().toString())>0){
-            if(!et11.getText().toString().equals(""))
+        if (!et10.getText().toString().equals("") && Integer.parseInt(et10.getText().toString()) > 0) {
+            if (!et11.getText().toString().equals(""))
                 _card_money = Integer.parseInt(et10.getText().toString()) - total_cost_ground - Integer.parseInt(et11.getText().toString());
             else
                 _card_money = Integer.parseInt(et10.getText().toString()) - total_cost_ground;
@@ -187,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
                      float in_money, float total_cost, float today_money, float total_pub_money,
                      float _next_ground_money, float reduce_next_ground_money, float today_next_ground_money, float now_next_ground_money,
                      float _card_money,
-                     float total_cost_ball){
+                     float total_cost_ball) {
         tv.setText("");
         tv.setVisibility(View.GONE);
 
@@ -195,14 +196,14 @@ public class MainActivity extends AppCompatActivity {
         tv1_1.setText(String.valueOf(average));
         tv1_2.setText(String.valueOf(each_cost));
 
-        if(in_money != 0){
+        if (in_money != 0) {
             LL2.setVisibility(View.VISIBLE);
             tv2_1.setText(String.valueOf(in_money));
             tv2_2.setText(String.valueOf(total_cost));
             tv2_3.setText(String.valueOf(today_money));
             tv2_4.setText(String.valueOf(total_pub_money));
 
-            if(status == force) {
+            if (status == force) {
                 LL5.setVisibility(View.VISIBLE);
                 tv5_1.setText(String.valueOf(total_cost_ball));
             }
@@ -211,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
             LL5.setVisibility(View.GONE);
         }
 
-        if(_next_ground_money!=0 && reduce_next_ground_money >= 0 && in_money != 0 && status == force){
+        if (_next_ground_money != 0 && reduce_next_ground_money >= 0 && in_money != 0 && status == force) {
             LL3.setVisibility(View.VISIBLE);
             tv3_1.setText(String.valueOf(_next_ground_money));
             tv3_2.setText(String.valueOf(today_next_ground_money));
@@ -219,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
         } else
             LL3.setVisibility(View.GONE);
 
-        if(_card_money!=0 && status == force){
+        if (_card_money != 0 && status == force) {
             LL4.setVisibility(View.VISIBLE);
             tv4_1.setText(String.valueOf(_card_money));
         } else
@@ -246,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
         myClosekeyboard();
     }
 
-    void Init(){
+    void Init() {
         LL1 = (LinearLayout) findViewById(R.id.LL1);
         LL2 = (LinearLayout) findViewById(R.id.LL2);
         LL3 = (LinearLayout) findViewById(R.id.LL3);
@@ -340,24 +341,23 @@ public class MainActivity extends AppCompatActivity {
         //et13.setVisibility(View.GONE);
     }
 
-    void SP(){
-        Preferences = getSharedPreferences(data,0);
-        if(Preferences.getInt(ground_cost, 0) != 0)
-            et1.setText(String.valueOf(Preferences.getInt(ground_cost,0)));
-        if(Preferences.getFloat(ball_cost_float,0)!=0)
+    void SP() {
+        Preferences = getSharedPreferences(data, 0);
+        if (Preferences.getInt(ground_cost, 0) != 0)
+            et1.setText(String.valueOf(Preferences.getInt(ground_cost, 0)));
+        if (Preferences.getFloat(ball_cost_float, 0) != 0)
             et3.setText(String.valueOf(Preferences.getFloat(ball_cost_float, 0)));
-        if(Preferences.getInt(now_pub_money,0)!=0)
+        if (Preferences.getInt(now_pub_money, 0) != 0)
             et6.setText(String.valueOf(Preferences.getInt(now_pub_money, 0)));
-        if(Preferences.getInt(next_ground_money,0)!=0)
+        if (Preferences.getInt(next_ground_money, 0) != 0)
             et8.setText(String.valueOf(Preferences.getInt(next_ground_money, 0)));
-        if(Preferences.getInt(card_money,0)!=0)
+        if (Preferences.getInt(card_money, 0) != 0)
             et10.setText(String.valueOf(Preferences.getInt(card_money, 0)));
         et2.requestFocus();
     }
 
-    private Toast mToast;
     public void showToast(String text) {
-        if(mToast == null) {
+        if (mToast == null) {
             mToast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
         } else {
             mToast.setText(text);
@@ -366,7 +366,7 @@ public class MainActivity extends AppCompatActivity {
         mToast.show();
     }
 
-    void myClosekeyboard(){
+    void myClosekeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {
             imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
@@ -394,9 +394,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    final int simple = 0;
-    final int force = 1;
-    int status = 0;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(Menu.NONE, 0, Menu.NONE, "切換");
@@ -405,7 +402,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (status){
+        switch (status) {
             case simple:
                 //tv6.setVisibility(View.VISIBLE);
                 //tv7.setVisibility(View.VISIBLE);
