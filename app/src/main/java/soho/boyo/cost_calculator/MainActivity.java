@@ -17,6 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import soho.boyo.cost_calculator.Calculate.Cost;
+
 public class MainActivity extends AppCompatActivity {
 
     static final String data = "data";
@@ -76,8 +78,9 @@ public class MainActivity extends AppCompatActivity {
                 Float.parseFloat(et2.getText().toString()) > 0) {
             total_cost_ground = Integer.parseInt(et1.getText().toString()) * Float.parseFloat(et2.getText().toString());
             Preferences.edit().putInt(ground_cost, Integer.parseInt(et1.getText().toString())).commit();
-            text_string += "場地(小時/元) x 使用小時 = 總場地費\n" +
-                    et1.getText().toString() + " x " + et2.getText().toString() + " = " + String.valueOf(total_cost_ground) + "\n";
+            int groundCostPerHour = Integer.parseInt(et1.getText().toString());
+            int hour = Integer.parseInt(et2.getText().toString());
+            text_string += Cost.getString(groundCostPerHour, hour);
         }
         if (!et3.getText().toString().equals("") &&
                 !et4.getText().toString().equals("") &&
