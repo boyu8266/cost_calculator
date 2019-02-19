@@ -17,7 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import soho.boyo.cost_calculator.Calculate.Cost;
+import soho.boyo.cost_calculator.Calculate.Calculate;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -72,25 +72,26 @@ public class MainActivity extends AppCompatActivity {
         float total_cost_ground = 0;
         float total_cost_ball = 0;
         float total_cost = 0;
-        if (!et1.getText().toString().equals("") &&
-                !et2.getText().toString().equals("") &&
-                Integer.parseInt(et1.getText().toString()) > 0 &&
-                Float.parseFloat(et2.getText().toString()) > 0) {
-            total_cost_ground = Integer.parseInt(et1.getText().toString()) * Float.parseFloat(et2.getText().toString());
-            Preferences.edit().putInt(ground_cost, Integer.parseInt(et1.getText().toString())).commit();
-            int groundCostPerHour = Integer.parseInt(et1.getText().toString());
-            int hour = Integer.parseInt(et2.getText().toString());
-            text_string += Cost.getString(groundCostPerHour, hour);
-        }
-        if (!et3.getText().toString().equals("") &&
-                !et4.getText().toString().equals("") &&
-                Float.parseFloat(et3.getText().toString()) > 0 &&
-                Integer.parseInt(et4.getText().toString()) > 0) {
-            total_cost_ball = Float.parseFloat(et3.getText().toString()) * Integer.parseInt(et4.getText().toString());
-            Preferences.edit().putFloat(ball_cost_float, Float.parseFloat(et3.getText().toString())).commit();
-            text_string += "羽球一顆(元) x 使用數量 = 總羽球花費\n" +
-                    et3.getText().toString() + " x " + et4.getText().toString() + " = " + String.valueOf(total_cost_ball) + "\n";
-        }
+
+        //  場地費區塊
+        int groundCostPerHour = et1.getText().toString().equals("") ? 0 : Integer.parseInt(et1.getText().toString());
+        float hour = et2.getText().toString().equals("") ? 0 : Float.parseFloat(et2.getText().toString());
+        text_string += Calculate.getGroundCost(groundCostPerHour, hour);
+
+        total_cost_ground = Calculate.groundCost(groundCostPerHour, hour);
+
+        if (groundCostPerHour > 0)
+            Preferences.edit().putInt(ground_cost, groundCostPerHour).commit();
+
+        //  球費區塊
+        float ballCostEach = et3.getText().toString().equals("") ? 0 : Float.parseFloat(et3.getText().toString());
+        int number = et4.getText().toString().equals("") ? 0 : Integer.parseInt(et4.getText().toString());
+        text_string += Calculate.getBallCost(ballCostEach, number);
+
+        total_cost_ball = Calculate.ballCost(ballCostEach, number);
+        if (ballCostEach > 0)
+            Preferences.edit().putFloat(ball_cost_float, ballCostEach).commit();
+
         if (total_cost_ground > 0 && total_cost_ball > 0) {
             total_cost = total_cost_ground + total_cost_ball;
             text_string += "總場地費 + 總羽球花費 = 今日總支出\n" +
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                     total_cost_ground + " = " + String.valueOf(total_cost) + "\n";
         } else if (total_cost_ball > 0) {
             total_cost = total_cost_ball;
-            text_string += "總場地費 = 今日總支出\n" +
+            text_string += "總球費 = 今日總支出\n" +
                     total_cost_ball + " = " + String.valueOf(total_cost) + "\n";
         } else {
             showToast("請完成相對應顏色之欄位");
