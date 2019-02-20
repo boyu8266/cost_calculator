@@ -30,4 +30,22 @@ public class Calculate {
         return string;
     }
 
+    public static String getTotalCost(float groundCost, float ballCost) {
+        int number = 0;
+        number += groundCost > 0 ? 1 : 0;
+        number += ballCost > 0 ? 1 : 0;
+
+        String string = "";
+        string += groundCost > 0 ? "總場地費 " : "";
+        string += number >= 2 ? "+ " : "";
+        string += ballCost > 0 ? "總羽球花費 " : "";
+        string += groundCost > 0 || ballCost > 0 ? "= 今日總支出\n" : "";
+
+        string += groundCost > 0 ? groundCost + " " : "";
+        string += number >= 2 ? "+ " : "";
+        string += ballCost > 0 ? ballCost + " " : "";
+        string += groundCost > 0 || ballCost > 0 ? "= " + (groundCost + ballCost) + "\n" : "";
+        return string;
+    }
+
 }

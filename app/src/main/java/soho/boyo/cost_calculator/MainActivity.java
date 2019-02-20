@@ -66,12 +66,9 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        text_string = //"(往下滑查看完整內容)\n\n" +
-                //"試算結果：\n" +
-                "----------\n";
+        text_string = "----------\n";
         float total_cost_ground = 0;
         float total_cost_ball = 0;
-        float total_cost = 0;
 
         //  場地費區塊
         int groundCostPerHour = et1.getText().toString().equals("") ? 0 : Integer.parseInt(et1.getText().toString());
@@ -92,25 +89,19 @@ public class MainActivity extends AppCompatActivity {
         if (ballCostEach > 0)
             Preferences.edit().putFloat(ball_cost_float, ballCostEach).commit();
 
-        if (total_cost_ground > 0 && total_cost_ball > 0) {
-            total_cost = total_cost_ground + total_cost_ball;
-            text_string += "總場地費 + 總羽球花費 = 今日總支出\n" +
-                    total_cost_ground + " + " + total_cost_ball + " = " + String.valueOf(total_cost) + "\n";
-        } else if (total_cost_ground > 0) {
-            total_cost = total_cost_ground;
-            text_string += "總場地費 = 今日總支出\n" +
-                    total_cost_ground + " = " + String.valueOf(total_cost) + "\n";
-        } else if (total_cost_ball > 0) {
-            total_cost = total_cost_ball;
-            text_string += "總球費 = 今日總支出\n" +
-                    total_cost_ball + " = " + String.valueOf(total_cost) + "\n";
-        } else {
+        //  ↓↓↓    明細區塊   ↓↓↓
+        text_string += Calculate.getTotalCost(total_cost_ground, total_cost_ball);
+
+        boolean b = total_cost_ground > 0 && total_cost_ball > 0 ? true : total_cost_ground > 0 || total_cost_ball > 0;
+        if (!b) {
             showToast("請完成相對應顏色之欄位");
             text_string = "請完成相對應顏色之欄位";
             tv.setText(text_string);
             myClosekeyboard();
             return;
         }
+
+        float total_cost = total_cost_ground + total_cost_ball;
         float average = total_cost / Integer.parseInt(et5.getText().toString());
         int each_cost = (int) average;
         while (each_cost % 10 != 0) {
@@ -121,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
                 String.valueOf(total_cost) + " / " + et5.getText().toString() + " = " + String.valueOf(average) + "\n" +
                 "建議每人收費：" + String.valueOf(each_cost) + "\n" +
                 "----------\n";
+        //  ↑↑↑    明細區塊   ↑↑↑
+
         float total_pub_money = 0;
         float in_money = 0;
         float today_money = 0;
