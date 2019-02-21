@@ -48,4 +48,34 @@ public class Calculate {
         return string;
     }
 
+    public static int getEachPay(int average) {
+        int eachPost = average;
+        while (eachPost % 10 != 0) {
+            eachPost++;
+        }
+        return eachPost;
+    }
+
+    public static String getAverage(float totalCost, float people, int average) {
+        int each_cost = getEachPay(average);
+
+        String string;
+        string = "----------\n" +
+                "今日總支出 / 打球人數 = 平均每人分攤\n" +
+                totalCost + " / " + people + " = " + (totalCost / people) + "\n" +
+                "建議每人收費：" + each_cost + "\n" +
+                "----------\n";
+        return string;
+    }
+
+    public static String getPublicExpense(int people, int money, float totalCost) {
+        String string;
+        string = "每人收費 x 人數 = 今日總收金額\n" +
+                money + " x " + people + " = " + (money * people) + "\n" +
+                "今日總收金額 - 今日總支出 = 今日公費\n" +
+                (money * people) + " - " + totalCost + " = " + ((money * people) - totalCost) + "\n";
+        string = money > 0 ? string : "";
+        return string;
+    }
+
 }

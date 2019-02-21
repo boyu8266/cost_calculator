@@ -102,16 +102,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         float total_cost = total_cost_ground + total_cost_ball;
-        float average = total_cost / Integer.parseInt(et5.getText().toString());
-        int each_cost = (int) average;
-        while (each_cost % 10 != 0) {
-            each_cost++;
-        }
-        text_string += "----------\n" +
-                "今日總支出 / 打球人數 = 平均每人分攤\n" +
-                String.valueOf(total_cost) + " / " + et5.getText().toString() + " = " + String.valueOf(average) + "\n" +
-                "建議每人收費：" + String.valueOf(each_cost) + "\n" +
-                "----------\n";
+        int people = Integer.parseInt(et5.getText().toString());
+        float average = total_cost / people;
+        int each_cost = Calculate.getEachPay((int) average);
+        text_string += Calculate.getAverage(total_cost, people, (int) average);
         //  ↑↑↑    明細區塊   ↑↑↑
 
         float total_pub_money = 0;
@@ -121,7 +115,11 @@ public class MainActivity extends AppCompatActivity {
         float reduce_next_ground_money = 0;
         float today_next_ground_money = 0;
         float now_next_ground_money = 0;
-        if (!et6.getText().toString().equals("") && !et7.getText().toString().equals("") && Integer.parseInt(et7.getText().toString()) > 0 && total_cost > 0) {
+
+        int money = et7.getText().toString().equals("") ? 0 : Integer.parseInt(et7.getText().toString());
+        text_string += money > 0 ? Calculate.getPublicExpense(people, money, total_cost) : "";
+
+        /*if (!et6.getText().toString().equals("") && !et7.getText().toString().equals("") && Integer.parseInt(et7.getText().toString()) > 0 && total_cost > 0) {
             int pub_money = Integer.parseInt(et6.getText().toString());
             today_money = (Integer.parseInt(et7.getText().toString()) * Integer.parseInt(et5.getText().toString())) - total_cost;
             total_pub_money = pub_money + today_money;
@@ -163,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
                     Preferences.edit().putInt(next_ground_money, (int) now_next_ground_money).commit();
                 }
             }
-        }
+        }*/
 
         float _card_money = 0;
         if (!et10.getText().toString().equals("") && Integer.parseInt(et10.getText().toString()) > 0) {
@@ -181,11 +179,11 @@ public class MainActivity extends AppCompatActivity {
                 total_cost_ball);
     }
 
-    void show_result(float average, int each_cost,
-                     float in_money, float total_cost, float today_money, float total_pub_money,
-                     float _next_ground_money, float reduce_next_ground_money, float today_next_ground_money, float now_next_ground_money,
-                     float _card_money,
-                     float total_cost_ball) {
+    private void show_result(float average, int each_cost,
+                             float in_money, float total_cost, float today_money, float total_pub_money,
+                             float _next_ground_money, float reduce_next_ground_money, float today_next_ground_money, float now_next_ground_money,
+                             float _card_money,
+                             float total_cost_ball) {
         tv.setText("");
         tv.setVisibility(View.GONE);
 
@@ -244,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
         myClosekeyboard();
     }
 
-    void Init() {
+    private void Init() {
         LL1 = (LinearLayout) findViewById(R.id.LL1);
         LL2 = (LinearLayout) findViewById(R.id.LL2);
         LL3 = (LinearLayout) findViewById(R.id.LL3);
@@ -338,7 +336,7 @@ public class MainActivity extends AppCompatActivity {
         //et13.setVisibility(View.GONE);
     }
 
-    void SP() {
+    private void SP() {
         Preferences = getSharedPreferences(data, 0);
         if (Preferences.getInt(ground_cost, 0) != 0)
             et1.setText(String.valueOf(Preferences.getInt(ground_cost, 0)));
@@ -353,7 +351,7 @@ public class MainActivity extends AppCompatActivity {
         et2.requestFocus();
     }
 
-    public void showToast(String text) {
+    private void showToast(String text) {
         if (mToast == null) {
             mToast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
         } else {
@@ -363,7 +361,7 @@ public class MainActivity extends AppCompatActivity {
         mToast.show();
     }
 
-    void myClosekeyboard() {
+    private void myClosekeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {
             imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
