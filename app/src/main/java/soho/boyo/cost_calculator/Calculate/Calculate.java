@@ -68,7 +68,7 @@ public class Calculate {
         return string;
     }
 
-    public static String getPublicExpense(int people, int money, float totalCost) {
+    public static String getPublicExpense(float people, int money, float totalCost) {
         String string;
         string = "每人收費 x 人數 = 今日總收金額\n" +
                 money + " x " + people + " = " + (money * people) + "\n" +

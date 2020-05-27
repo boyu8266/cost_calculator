@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
     void start_calculator() {
         if (et5.getText().toString().equals("") ||
-                Integer.parseInt(et5.getText().toString()) == 0) {
+                Float.parseFloat(et5.getText().toString()) == 0) {
             showToast("請確認欄位 - [打球人數]");
             text_string = "請確認欄位 - [打球人數]";
             tv.setText(text_string);
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         float total_cost = total_cost_ground + total_cost_ball;
-        int people = Integer.parseInt(et5.getText().toString());
+        float people = Float.parseFloat(et5.getText().toString());
         float average = total_cost / people;
         int each_cost = Calculate.getEachPay((int) average);
         text_string += Calculate.getAverage(total_cost, people, (int) average);
