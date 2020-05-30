@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         int money = et7.getText().toString().equals("") ? 0 : Integer.parseInt(et7.getText().toString());
         text_string += money > 0 ? Calculate.getPublicExpense(people, money, total_cost) : "";
 
-        /*if (!et6.getText().toString().equals("") && !et7.getText().toString().equals("") && Integer.parseInt(et7.getText().toString()) > 0 && total_cost > 0) {
+        if (!et6.getText().toString().equals("") && !et7.getText().toString().equals("") && Integer.parseInt(et7.getText().toString()) > 0 && total_cost > 0) {
             int pub_money = Integer.parseInt(et6.getText().toString());
             today_money = (Integer.parseInt(et7.getText().toString()) * Integer.parseInt(et5.getText().toString())) - total_cost;
             total_pub_money = pub_money + today_money;
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
                     Preferences.edit().putInt(next_ground_money, (int) now_next_ground_money).commit();
                 }
             }
-        }*/
+        }
 
         float _card_money = 0;
         if (!et10.getText().toString().equals("") && Integer.parseInt(et10.getText().toString()) > 0) {
@@ -191,20 +191,15 @@ public class MainActivity extends AppCompatActivity {
         tv1_1.setText(String.valueOf(average));
         tv1_2.setText(String.valueOf(each_cost));
 
-        if (in_money != 0) {
-            LL2.setVisibility(View.VISIBLE);
-            tv2_1.setText(String.valueOf(in_money));
-            tv2_2.setText(String.valueOf(total_cost));
-            tv2_3.setText(String.valueOf(today_money));
-            tv2_4.setText(String.valueOf(total_pub_money));
+        LL2.setVisibility(View.VISIBLE);
+        tv2_1.setText(String.valueOf(in_money));
+        tv2_2.setText(String.valueOf(total_cost));
+        tv2_3.setText(String.valueOf(today_money));
+        tv2_4.setText(String.valueOf(total_pub_money));
 
-            if (status == force) {
-                LL5.setVisibility(View.VISIBLE);
-                tv5_1.setText(String.valueOf(total_cost_ball));
-            }
-        } else {
-            LL2.setVisibility(View.GONE);
-            LL5.setVisibility(View.GONE);
+        if (status == force) {
+            LL5.setVisibility(View.VISIBLE);
+            tv5_1.setText(String.valueOf(total_cost_ball));
         }
 
         if (_next_ground_money != 0 && reduce_next_ground_money >= 0 && in_money != 0 && status == force) {
