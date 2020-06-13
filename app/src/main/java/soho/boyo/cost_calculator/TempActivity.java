@@ -22,11 +22,9 @@ public class TempActivity extends Activity {
         setContentView(R.layout.template);
 
         List<Item> data = new LinkedList<Item>() {{
-            add(new Item("Test", "1"));
-            add(new Item("Test", "2"));
+            add(new Item("場地費用", "1"));
+            add(new Item("實際小時", "2"));
         }};
-
-        Log.d("brendan", "data: " + data.size());
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         ItemAdapter itemAdapter = new ItemAdapter(data);
