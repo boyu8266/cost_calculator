@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -22,8 +21,8 @@ public class TempActivity extends Activity {
         setContentView(R.layout.template);
 
         List<Item> data = new LinkedList<Item>() {{
-            add(new Item("場地費用", "1"));
-            add(new Item("實際小時", "2"));
+            add(new Item("場地費用", "1", "#0066FF"));
+            add(new Item("實際小時", "2", "#0066FF"));
         }};
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);

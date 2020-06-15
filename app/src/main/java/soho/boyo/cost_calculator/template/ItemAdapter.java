@@ -40,6 +40,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemViewHolder> {
         EditText value = holder.value;
 
         key.setText(item.key);
+        key.setTextColor(item.getColor());
         value.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
