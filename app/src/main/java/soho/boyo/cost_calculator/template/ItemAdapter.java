@@ -16,10 +16,16 @@ import java.util.List;
 import soho.boyo.cost_calculator.R;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemViewHolder> {
-    private static List<Item> sData;
+    private List<Item> list;
+    private OnTextChangedListener onTextChangedListener;
 
-    public ItemAdapter(List<Item> data) {
-        sData = data;
+    public ItemAdapter(List<Item> list, OnTextChangedListener onTextChangedListener) {
+        if (null == onTextChangedListener) {
+            throw new RuntimeException("null == onTextChangedListener");
+        }
+
+        this.list = list;
+        this.onTextChangedListener = onTextChangedListener;
     }
 
     @NonNull
@@ -34,13 +40,16 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        final Item item = sData.get(position);
+        final Item item = list.get(position);
 
         TextView key = holder.key;
+        TextView colon = holder.colon;
         EditText value = holder.value;
 
         key.setText(item.key);
         key.setTextColor(item.getColor());
+        colon.setTextColor(item.getColor());
+        final int index = position;
         value.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -52,13 +61,24 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemViewHolder> {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                item.value = editable.toString();
+                onTextChangedListener.onTextChanged(index, editable.toString());
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return sData.size();
+        return list.size();
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull ItemViewHolder holder) {
+        super.onViewRecycled(holder);
+        holder.key.setText("");
+        holder.value.addTextChangedListener(null);
+    }
+
+    public interface OnTextChangedListener {
+        void onTextChanged(int index, String str);
     }
 }

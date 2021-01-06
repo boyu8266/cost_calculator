@@ -10,12 +10,14 @@ import soho.boyo.cost_calculator.R;
 
 public class ItemViewHolder extends RecyclerView.ViewHolder {
     protected TextView key;
+    protected TextView colon;
     protected EditText value;
 
     public ItemViewHolder(@NonNull View itemView) {
         super(itemView);
 
         key = itemView.findViewById(R.id.key);
+        colon = itemView.findViewById(R.id.colon);
         value = itemView.findViewById(R.id.value);
     }
 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 import soho.boyo.cost_calculator.template.Item;
 import soho.boyo.cost_calculator.template.ItemAdapter;
 
-public class TempActivity extends Activity {
+public class TempActivity extends Activity implements ItemAdapter.OnTextChangedListener {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -26,9 +27,13 @@ public class TempActivity extends Activity {
         }};
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        ItemAdapter itemAdapter = new ItemAdapter(data);
+        ItemAdapter itemAdapter = new ItemAdapter(data, this::onTextChanged);
         recyclerView.setAdapter(itemAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
     }
 
+    @Override
+    public void onTextChanged(int index, String str) {
+        Log.d("brendan", "index: " + index + ", value: " + str);
+    }
 }
