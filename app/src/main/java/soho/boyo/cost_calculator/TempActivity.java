@@ -22,8 +22,8 @@ public class TempActivity extends Activity implements ItemAdapter.OnTextChangedL
         setContentView(R.layout.template);
 
         List<Item> data = new LinkedList<Item>() {{
-            add(new Item("場地費用", "1", "#0066FF"));
-            add(new Item("實際小時", "2", "#0066FF"));
+            add(new Item("場地費用", "#0066FF"));
+            add(new Item("實際小時", "#0066FF"));
         }};
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);

@@ -5,13 +5,10 @@ import android.graphics.Color;
 public class Item {
 
     public String key;
-    public String value;
-
     public String color;
 
-    public Item(String key, String value, String color) {
+    public Item(String key, String color) {
         this.key = key;
-        this.value = value;
         this.color = color;
     }
 
