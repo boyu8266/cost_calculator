@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,7 +12,10 @@ import java.util.List;
 import soho.boyo.cost_calculator.template.Item;
 import soho.boyo.cost_calculator.template.ItemAdapter;
 
-public class TempActivity extends Activity implements ItemAdapter.OnTextChangedListener {
+public class TempActivity extends Activity
+        implements ItemAdapter.OnTextChangedListener, Key {
+
+    private List<Item> list = new LinkedList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -21,19 +23,25 @@ public class TempActivity extends Activity implements ItemAdapter.OnTextChangedL
 
         setContentView(R.layout.template);
 
-        List<Item> data = new LinkedList<Item>() {{
-            add(new Item("場地費用", "#0066FF"));
-            add(new Item("實際小時", "#0066FF"));
-        }};
+        list.add(new Item(GROUND_COST, "#0066FF"));
+        list.add(new Item(GROUND_HOUR, "#0066FF"));
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        ItemAdapter itemAdapter = new ItemAdapter(data, this::onTextChanged);
+        ItemAdapter itemAdapter = new ItemAdapter(list, this::onTextChanged);
         recyclerView.setAdapter(itemAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
     }
 
     @Override
     public void onTextChanged(int index, String str) {
-        Log.d("brendan", "index: " + index + ", value: " + str);
+        switch (list.get(index).key) {
+            case GROUND_COST:
+                break;
+
+            case GROUND_HOUR:
+                break;
+
+            default:
+        }
     }
 }
